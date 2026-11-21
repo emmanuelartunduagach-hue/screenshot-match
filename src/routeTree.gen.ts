@@ -10,33 +10,168 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ShellRouteImport } from './routes/_shell'
+import { Route as AccesoRouteImport } from './routes/acceso'
+import { Route as BienvenidaRouteImport } from './routes/bienvenida'
+import { Route as ShellAsistenteRouteImport } from './routes/_shell.asistente'
+import { Route as ShellInicioRouteImport } from './routes/_shell.inicio'
+import { Route as ShellMapaRouteImport } from './routes/_shell.mapa'
+import { Route as ShellMisReportesRouteImport } from './routes/_shell.mis-reportes'
+import { Route as ShellReportarRouteImport } from './routes/_shell.reportar'
+import { Route as ApiAsistenteRouteImport } from './routes/api/asistente'
+import { Route as ShellRutaIndexRouteImport } from './routes/_shell.ruta.index'
+import { Route as ShellRutaConfirmadaRouteImport } from './routes/_shell.ruta.confirmada'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ShellRoute = ShellRouteImport.update({
+  id: '/_shell',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccesoRoute = AccesoRouteImport.update({
+  id: '/acceso',
+  path: '/acceso',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BienvenidaRoute = BienvenidaRouteImport.update({
+  id: '/bienvenida',
+  path: '/bienvenida',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShellAsistenteRoute = ShellAsistenteRouteImport.update({
+  id: '/asistente',
+  path: '/asistente',
+  getParentRoute: () => ShellRoute,
+} as any)
+const ShellInicioRoute = ShellInicioRouteImport.update({
+  id: '/inicio',
+  path: '/inicio',
+  getParentRoute: () => ShellRoute,
+} as any)
+const ShellMapaRoute = ShellMapaRouteImport.update({
+  id: '/mapa',
+  path: '/mapa',
+  getParentRoute: () => ShellRoute,
+} as any)
+const ShellMisReportesRoute = ShellMisReportesRouteImport.update({
+  id: '/mis-reportes',
+  path: '/mis-reportes',
+  getParentRoute: () => ShellRoute,
+} as any)
+const ShellReportarRoute = ShellReportarRouteImport.update({
+  id: '/reportar',
+  path: '/reportar',
+  getParentRoute: () => ShellRoute,
+} as any)
+const ApiAsistenteRoute = ApiAsistenteRouteImport.update({
+  id: '/api/asistente',
+  path: '/api/asistente',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShellRutaIndexRoute = ShellRutaIndexRouteImport.update({
+  id: '/ruta/',
+  path: '/ruta/',
+  getParentRoute: () => ShellRoute,
+} as any)
+const ShellRutaConfirmadaRoute = ShellRutaConfirmadaRouteImport.update({
+  id: '/ruta/confirmada',
+  path: '/ruta/confirmada',
+  getParentRoute: () => ShellRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/acceso': typeof AccesoRoute
+  '/bienvenida': typeof BienvenidaRoute
+  '/asistente': typeof ShellAsistenteRoute
+  '/inicio': typeof ShellInicioRoute
+  '/mapa': typeof ShellMapaRoute
+  '/mis-reportes': typeof ShellMisReportesRoute
+  '/reportar': typeof ShellReportarRoute
+  '/api/asistente': typeof ApiAsistenteRoute
+  '/ruta/confirmada': typeof ShellRutaConfirmadaRoute
+  '/ruta/': typeof ShellRutaIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/acceso': typeof AccesoRoute
+  '/bienvenida': typeof BienvenidaRoute
+  '/asistente': typeof ShellAsistenteRoute
+  '/inicio': typeof ShellInicioRoute
+  '/mapa': typeof ShellMapaRoute
+  '/mis-reportes': typeof ShellMisReportesRoute
+  '/reportar': typeof ShellReportarRoute
+  '/api/asistente': typeof ApiAsistenteRoute
+  '/ruta/confirmada': typeof ShellRutaConfirmadaRoute
+  '/ruta': typeof ShellRutaIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_shell': typeof ShellRouteWithChildren
+  '/acceso': typeof AccesoRoute
+  '/bienvenida': typeof BienvenidaRoute
+  '/_shell/asistente': typeof ShellAsistenteRoute
+  '/_shell/inicio': typeof ShellInicioRoute
+  '/_shell/mapa': typeof ShellMapaRoute
+  '/_shell/mis-reportes': typeof ShellMisReportesRoute
+  '/_shell/reportar': typeof ShellReportarRoute
+  '/api/asistente': typeof ApiAsistenteRoute
+  '/_shell/ruta/confirmada': typeof ShellRutaConfirmadaRoute
+  '/_shell/ruta/': typeof ShellRutaIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/acceso'
+    | '/bienvenida'
+    | '/asistente'
+    | '/inicio'
+    | '/mapa'
+    | '/mis-reportes'
+    | '/reportar'
+    | '/api/asistente'
+    | '/ruta/confirmada'
+    | '/ruta/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/acceso'
+    | '/bienvenida'
+    | '/asistente'
+    | '/inicio'
+    | '/mapa'
+    | '/mis-reportes'
+    | '/reportar'
+    | '/api/asistente'
+    | '/ruta/confirmada'
+    | '/ruta'
+  id:
+    | '__root__'
+    | '/'
+    | '/_shell'
+    | '/acceso'
+    | '/bienvenida'
+    | '/_shell/asistente'
+    | '/_shell/inicio'
+    | '/_shell/mapa'
+    | '/_shell/mis-reportes'
+    | '/_shell/reportar'
+    | '/api/asistente'
+    | '/_shell/ruta/confirmada'
+    | '/_shell/ruta/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ShellRoute: typeof ShellRouteWithChildren
+  AccesoRoute: typeof AccesoRoute
+  BienvenidaRoute: typeof BienvenidaRoute
+  ApiAsistenteRoute: typeof ApiAsistenteRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +183,114 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_shell': {
+      id: '/_shell'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof ShellRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/acceso': {
+      id: '/acceso'
+      path: '/acceso'
+      fullPath: '/acceso'
+      preLoaderRoute: typeof AccesoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bienvenida': {
+      id: '/bienvenida'
+      path: '/bienvenida'
+      fullPath: '/bienvenida'
+      preLoaderRoute: typeof BienvenidaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_shell/asistente': {
+      id: '/_shell/asistente'
+      path: '/asistente'
+      fullPath: '/asistente'
+      preLoaderRoute: typeof ShellAsistenteRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/_shell/inicio': {
+      id: '/_shell/inicio'
+      path: '/inicio'
+      fullPath: '/inicio'
+      preLoaderRoute: typeof ShellInicioRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/_shell/mapa': {
+      id: '/_shell/mapa'
+      path: '/mapa'
+      fullPath: '/mapa'
+      preLoaderRoute: typeof ShellMapaRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/_shell/mis-reportes': {
+      id: '/_shell/mis-reportes'
+      path: '/mis-reportes'
+      fullPath: '/mis-reportes'
+      preLoaderRoute: typeof ShellMisReportesRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/_shell/reportar': {
+      id: '/_shell/reportar'
+      path: '/reportar'
+      fullPath: '/reportar'
+      preLoaderRoute: typeof ShellReportarRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/api/asistente': {
+      id: '/api/asistente'
+      path: '/api/asistente'
+      fullPath: '/api/asistente'
+      preLoaderRoute: typeof ApiAsistenteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_shell/ruta/': {
+      id: '/_shell/ruta/'
+      path: '/ruta'
+      fullPath: '/ruta/'
+      preLoaderRoute: typeof ShellRutaIndexRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/_shell/ruta/confirmada': {
+      id: '/_shell/ruta/confirmada'
+      path: '/ruta/confirmada'
+      fullPath: '/ruta/confirmada'
+      preLoaderRoute: typeof ShellRutaConfirmadaRouteImport
+      parentRoute: typeof ShellRoute
+    }
   }
 }
 
+interface ShellRouteChildren {
+  ShellAsistenteRoute: typeof ShellAsistenteRoute
+  ShellInicioRoute: typeof ShellInicioRoute
+  ShellMapaRoute: typeof ShellMapaRoute
+  ShellMisReportesRoute: typeof ShellMisReportesRoute
+  ShellReportarRoute: typeof ShellReportarRoute
+  ShellRutaConfirmadaRoute: typeof ShellRutaConfirmadaRoute
+  ShellRutaIndexRoute: typeof ShellRutaIndexRoute
+}
+
+const ShellRouteChildren: ShellRouteChildren = {
+  ShellAsistenteRoute: ShellAsistenteRoute,
+  ShellInicioRoute: ShellInicioRoute,
+  ShellMapaRoute: ShellMapaRoute,
+  ShellMisReportesRoute: ShellMisReportesRoute,
+  ShellReportarRoute: ShellReportarRoute,
+  ShellRutaConfirmadaRoute: ShellRutaConfirmadaRoute,
+  ShellRutaIndexRoute: ShellRutaIndexRoute,
+}
+
+const ShellRouteWithChildren = ShellRoute._addFileChildren(ShellRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ShellRoute: ShellRouteWithChildren,
+  AccesoRoute: AccesoRoute,
+  BienvenidaRoute: BienvenidaRoute,
+  ApiAsistenteRoute: ApiAsistenteRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
