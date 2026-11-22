@@ -14,6 +14,7 @@ import { Route as ShellRouteImport } from './routes/_shell'
 import { Route as AccesoRouteImport } from './routes/acceso'
 import { Route as BienvenidaRouteImport } from './routes/bienvenida'
 import { Route as ShellAsistenteRouteImport } from './routes/_shell.asistente'
+import { Route as ShellGuiaDeEstiloRouteImport } from './routes/_shell.guia-de-estilo'
 import { Route as ShellInicioRouteImport } from './routes/_shell.inicio'
 import { Route as ShellMapaRouteImport } from './routes/_shell.mapa'
 import { Route as ShellMisReportesRouteImport } from './routes/_shell.mis-reportes'
@@ -44,6 +45,11 @@ const BienvenidaRoute = BienvenidaRouteImport.update({
 const ShellAsistenteRoute = ShellAsistenteRouteImport.update({
   id: '/asistente',
   path: '/asistente',
+  getParentRoute: () => ShellRoute,
+} as any)
+const ShellGuiaDeEstiloRoute = ShellGuiaDeEstiloRouteImport.update({
+  id: '/guia-de-estilo',
+  path: '/guia-de-estilo',
   getParentRoute: () => ShellRoute,
 } as any)
 const ShellInicioRoute = ShellInicioRouteImport.update({
@@ -87,6 +93,7 @@ export interface FileRoutesByFullPath {
   '/acceso': typeof AccesoRoute
   '/bienvenida': typeof BienvenidaRoute
   '/asistente': typeof ShellAsistenteRoute
+  '/guia-de-estilo': typeof ShellGuiaDeEstiloRoute
   '/inicio': typeof ShellInicioRoute
   '/mapa': typeof ShellMapaRoute
   '/mis-reportes': typeof ShellMisReportesRoute
@@ -100,6 +107,7 @@ export interface FileRoutesByTo {
   '/acceso': typeof AccesoRoute
   '/bienvenida': typeof BienvenidaRoute
   '/asistente': typeof ShellAsistenteRoute
+  '/guia-de-estilo': typeof ShellGuiaDeEstiloRoute
   '/inicio': typeof ShellInicioRoute
   '/mapa': typeof ShellMapaRoute
   '/mis-reportes': typeof ShellMisReportesRoute
@@ -115,6 +123,7 @@ export interface FileRoutesById {
   '/acceso': typeof AccesoRoute
   '/bienvenida': typeof BienvenidaRoute
   '/_shell/asistente': typeof ShellAsistenteRoute
+  '/_shell/guia-de-estilo': typeof ShellGuiaDeEstiloRoute
   '/_shell/inicio': typeof ShellInicioRoute
   '/_shell/mapa': typeof ShellMapaRoute
   '/_shell/mis-reportes': typeof ShellMisReportesRoute
@@ -130,6 +139,7 @@ export interface FileRouteTypes {
     | '/acceso'
     | '/bienvenida'
     | '/asistente'
+    | '/guia-de-estilo'
     | '/inicio'
     | '/mapa'
     | '/mis-reportes'
@@ -143,6 +153,7 @@ export interface FileRouteTypes {
     | '/acceso'
     | '/bienvenida'
     | '/asistente'
+    | '/guia-de-estilo'
     | '/inicio'
     | '/mapa'
     | '/mis-reportes'
@@ -157,6 +168,7 @@ export interface FileRouteTypes {
     | '/acceso'
     | '/bienvenida'
     | '/_shell/asistente'
+    | '/_shell/guia-de-estilo'
     | '/_shell/inicio'
     | '/_shell/mapa'
     | '/_shell/mis-reportes'
@@ -209,6 +221,13 @@ declare module '@tanstack/react-router' {
       path: '/asistente'
       fullPath: '/asistente'
       preLoaderRoute: typeof ShellAsistenteRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/_shell/guia-de-estilo': {
+      id: '/_shell/guia-de-estilo'
+      path: '/guia-de-estilo'
+      fullPath: '/guia-de-estilo'
+      preLoaderRoute: typeof ShellGuiaDeEstiloRouteImport
       parentRoute: typeof ShellRoute
     }
     '/_shell/inicio': {
@@ -265,6 +284,7 @@ declare module '@tanstack/react-router' {
 
 interface ShellRouteChildren {
   ShellAsistenteRoute: typeof ShellAsistenteRoute
+  ShellGuiaDeEstiloRoute: typeof ShellGuiaDeEstiloRoute
   ShellInicioRoute: typeof ShellInicioRoute
   ShellMapaRoute: typeof ShellMapaRoute
   ShellMisReportesRoute: typeof ShellMisReportesRoute
@@ -275,6 +295,7 @@ interface ShellRouteChildren {
 
 const ShellRouteChildren: ShellRouteChildren = {
   ShellAsistenteRoute: ShellAsistenteRoute,
+  ShellGuiaDeEstiloRoute: ShellGuiaDeEstiloRoute,
   ShellInicioRoute: ShellInicioRoute,
   ShellMapaRoute: ShellMapaRoute,
   ShellMisReportesRoute: ShellMisReportesRoute,

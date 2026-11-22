@@ -54,7 +54,7 @@ function Mapa() {
   };
 
   return (
-    <div className="grid h-full grid-rows-[auto_minmax(260px,44%)_auto_minmax(0,1fr)] lg:grid-cols-[420px_minmax(0,1fr)] lg:grid-rows-[auto_auto_minmax(0,1fr)]">
+    <div className="grid h-full grid-cols-[minmax(0,1fr)] grid-rows-[auto_minmax(260px,44%)_auto_minmax(0,1fr)] lg:grid-cols-[420px_minmax(0,1fr)] lg:grid-rows-[auto_auto_minmax(0,1fr)]">
       <EncabezadoPantalla
         titulo="Mapa de novedades"
         subtitulo={listo ? `${activos.length} novedades activas en Neiva` : "Neiva, Huila"}

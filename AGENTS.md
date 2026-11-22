@@ -28,3 +28,13 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Project rules (RutaSegura)
+
+- App state (session, reports, saved routes, map view/filter) lives in `src/lib/store.ts` (useSyncExternalStore + localStorage); the chat history in `src/lib/chat.ts`. Why: demo prototype with no backend except the AI assistant.
+- Safety score and simulated routes are pure functions in `src/lib/seguridad.ts` and `src/lib/rutas.ts`, covered by `src/lib/seguridad.test.ts`. Why: the rules are the core of the product and must stay testable.
+- Leaflet is only loaded via dynamic `import()` inside `src/components/rs/MapaNeiva.tsx` (it sets `window.L` before loading markercluster). Why: Leaflet touches `window` at import time and breaks SSR.
+- The assistant streams plain text from the server route `src/routes/api/asistente.ts` via `@lovable.dev/ai-gateway`; the system prompt lives in `src/lib/asistente-prompt.ts` and must be updated when app screens or score rules change. Why: keeps the assistant from inventing features.
+- Logged-in screens are children of the pathless layout `src/routes/_shell.tsx` (sidebar on desktop, bottom nav on mobile). Why: one shared shell and session guard.
+- `--text-xs`/`--text-sm` are mapped to 1rem in `src/styles.css`. Why: accessibility rule of a 16 px minimum text size, including shadcn components.
+- Map marker/route colors are CSS classes (`.rs-pin--*`, `.rs-ruta-*`) using design tokens, never inline colors in Leaflet options.

@@ -66,6 +66,8 @@ export function MapaNeiva(props: PropsMapa) {
   const propsRef = useRef(props);
   propsRef.current = props;
   const [Lf, setLf] = useState<L | null>(null);
+  /** Vuelve a encajar la última ruta cuando cambia el tamaño del contenedor. */
+  const reencajarRef = useRef<(() => void) | null>(null);
   const interactivo = props.interactivo ?? true;
 
   // Crear el mapa una sola vez (Leaflet solo existe en el navegador).
@@ -110,7 +112,10 @@ export function MapaNeiva(props: PropsMapa) {
       m.on("click", (e: Leaflet.LeafletMouseEvent) => {
         propsRef.current.onClicMapa?.({ lat: e.latlng.lat, lng: e.latlng.lng });
       });
-      observador = new ResizeObserver(() => m.invalidateSize());
+      observador = new ResizeObserver(() => {
+        m.invalidateSize();
+        reencajarRef.current?.();
+      });
       observador.observe(contRef.current);
       mapaRef.current = m;
       setLf(Leaf);
@@ -246,13 +251,17 @@ export function MapaNeiva(props: PropsMapa) {
     const enc = propsRef.current.encajar;
     if (!Lf || !mapa || !enc || enc.puntos.length === 0) return;
     const r = enc.relleno ?? { top: 40, right: 40, bottom: 40, left: 40 };
+    const limites = Lf.latLngBounds(enc.puntos.map((p) => [p.lat, p.lng] as [number, number]));
+    const encajarAhora = (animar: boolean) =>
+      mapa.fitBounds(limites, {
+        paddingTopLeft: [r.left, r.top],
+        paddingBottomRight: [r.right, r.bottom],
+        maxZoom: 16,
+        animate: animar,
+      });
     mapa.invalidateSize();
-    mapa.fitBounds(Lf.latLngBounds(enc.puntos.map((p) => [p.lat, p.lng] as [number, number])), {
-      paddingTopLeft: [r.left, r.top],
-      paddingBottomRight: [r.right, r.bottom],
-      maxZoom: 16,
-      animate: true,
-    });
+    encajarAhora(true);
+    reencajarRef.current = () => encajarAhora(false);
   }, [Lf, claveEncajar]);
 
   const claveEnfocar = props.enfocar?.clave;

@@ -53,7 +53,7 @@ function Reportar() {
   const [descripcion, setDescripcion] = useState("");
   const [anonimo, setAnonimo] = useState(true);
   const [nombre, setNombre] = useState(sesion && !sesion.invitado ? sesion.nombre : "");
-  const [errores, setErrores] = useState<{ descripcion?: string; nombre?: string }>({});
+  const [errores, setErrores] = useState<{ descripcion?: string | undefined; nombre?: string | undefined }>({});
   const [publicando, setPublicando] = useState(false);
   const [confirmarSalida, setConfirmarSalida] = useState(false);
 

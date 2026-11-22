@@ -70,7 +70,7 @@ export function IconoTipo({ tipo, className }: { tipo: TipoNovedad; className?: 
       className={cn(
         "grid size-11 shrink-0 place-items-center rounded-xl",
         etiquetaVariantes({ tono: tipo }),
-        "p-0",
+        "p-0 [&_svg]:size-5",
         className,
       )}
       aria-hidden

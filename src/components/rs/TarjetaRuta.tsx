@@ -1,7 +1,7 @@
 import { ArrowRight, Clock, Footprints, ShieldCheck, Sparkles } from "lucide-react";
 
 import { formatoKm } from "@/lib/formato";
-import { ORDEN_TIPOS, TIPOS } from "@/lib/novedades";
+import { ORDEN_TIPOS, TIPOS, contarCorto } from "@/lib/novedades";
 import type { RutaSimulada } from "@/lib/rutas";
 import { cn } from "@/lib/utils";
 
@@ -81,7 +81,7 @@ export function TarjetaRuta({
               const meta = TIPOS[t];
               return (
                 <Etiqueta key={t} tono={t} icono={meta.icono}>
-                  {ruta.conteo[t]} {meta.etiqueta.toLowerCase()}
+                  {contarCorto(ruta.conteo[t], t)}
                 </Etiqueta>
               );
             })

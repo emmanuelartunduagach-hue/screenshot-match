@@ -31,6 +31,7 @@ import { ORDEN_TIPOS, TIPOS, confirmacionesEfectivas, estadoReporte, tiempoRelat
 import { acciones, useEstado } from "@/lib/store";
 import type { Reporte, RutaElegida, TipoNovedad } from "@/lib/tipos";
 import { MAX_DESCRIPCION, validarDescripcion } from "@/lib/validacion";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_shell/mis-reportes")({
   head: () => metaPantalla("Mis reportes", "Sigue el estado de tus reportes en Neiva y revisa tus rutas guardadas."),
@@ -59,7 +60,7 @@ function MisReportes() {
         titulo="Mis reportes"
         subtitulo="Seguimiento de lo que has reportado"
         acciones={
-          <Link to="/reportar" className={botonVariantes({ tamano: "sm", className: "hidden sm:inline-flex" })}>
+          <Link to="/reportar" className={cn(botonVariantes({ tamano: "sm" }), "hidden sm:inline-flex")}>
             <Plus aria-hidden /> Reportar
           </Link>
         }

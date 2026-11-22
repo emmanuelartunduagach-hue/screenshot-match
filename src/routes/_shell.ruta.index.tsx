@@ -25,6 +25,8 @@ export const Route = createFileRoute("/_shell/ruta/")({
 });
 
 const ALTURA_CERRADO = 168;
+const ORDEN_ALTERNA: ("alterna" | "rapida")[] = ["alterna", "rapida"];
+const ORDEN_RAPIDA: ("alterna" | "rapida")[] = ["rapida", "alterna"];
 
 function PlanearRuta() {
   const estado = useEstado();
@@ -60,7 +62,7 @@ function PlanearRuta() {
     ro.observe(el);
     return () => ro.disconnect();
   }, []);
-  const altoAbierto = Math.round(altoCont * 0.62);
+  const altoAbierto = Math.round(altoCont * 0.58);
   const altoVisible = abierto ? altoAbierto : ALTURA_CERRADO;
 
   const rutasMapa = useMemo<RutaMapa[]>(
@@ -165,9 +167,7 @@ function PlanearRuta() {
               Elige la que prefieras. La más rápida te toma {plan.rapida.minutos} min.
             </Aviso>
           )}
-          {(["alterna", "rapida"] as const)
-            .sort((a, b) => (a === plan.recomendada ? -1 : b === plan.recomendada ? 1 : 0))
-            .map((id) => (
+          {(plan.recomendada === "rapida" ? ORDEN_RAPIDA : ORDEN_ALTERNA).map((id) => (
               <TarjetaRuta
                 key={id}
                 ruta={plan[id]}

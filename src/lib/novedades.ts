@@ -74,6 +74,18 @@ export function estadoReporte(r: Reporte, ahora: number): EstadoReporte {
   return "Publicado";
 }
 
+const CORTO: Record<TipoNovedad, [string, string]> = {
+  hurto: ["hurto", "hurtos"],
+  iluminacion: ["mala iluminación", "mala iluminación"],
+  obra: ["obra o bloqueo", "obras o bloqueos"],
+  segura: ["zona segura", "zonas seguras"],
+};
+
+/** "2 hurtos", "1 zona segura" */
+export function contarCorto(n: number, tipo: TipoNovedad): string {
+  return `${n} ${CORTO[tipo][n === 1 ? 0 : 1]}`;
+}
+
 export function contarPor(n: number, tipo: TipoNovedad): string {
   const meta = TIPOS[tipo];
   return `${n} ${n === 1 ? meta.singular : meta.plural}`;
