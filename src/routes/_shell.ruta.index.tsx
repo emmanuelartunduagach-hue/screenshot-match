@@ -15,6 +15,7 @@ import { useEsEscritorio } from "@/hooks/use-escritorio";
 import { LUGARES, lugarPorId } from "@/lib/lugares";
 import { metaPantalla } from "@/lib/meta";
 import { MENSAJE_SIMILAR, novedadesEvitadas, planearRutas, type PlanRutas, type RutaSimulada } from "@/lib/rutas";
+import { obtenerTrazosCalles, planearDesdeTrazos, type TrazoCalles } from "@/lib/rutas-calles";
 import { acciones, useEstado } from "@/lib/store";
 import type { RutaElegida } from "@/lib/tipos";
 import { cn } from "@/lib/utils";
@@ -40,10 +41,32 @@ function PlanearRuta() {
   const mismoLugar = origenId === destinoId;
 
   const activos = useMemo(() => estado.reportes.filter((r) => !r.resuelto), [estado.reportes]);
-  const plan = useMemo<PlanRutas | null>(
-    () => (ahora > 0 && origen && destino && !mismoLugar ? planearRutas(origen, destino, activos, ahora) : null),
-    [ahora, origen, destino, mismoLugar, activos],
-  );
+  // Trazos reales por calles (OSRM). Si falla la conexión se usa la ruta aproximada.
+  const [trazos, setTrazos] = useState<{ clave: string; estado: "cargando" | "listo" | "error"; datos: TrazoCalles[] }>({
+    clave: "",
+    estado: "cargando",
+    datos: [],
+  });
+  const claveTrayecto = `${origenId}-${destinoId}`;
+  useEffect(() => {
+    if (!origen || !destino || mismoLugar) return;
+    const control = new AbortController();
+    setTrazos({ clave: claveTrayecto, estado: "cargando", datos: [] });
+    obtenerTrazosCalles(origen, destino, control.signal)
+      .then((datos) => setTrazos({ clave: claveTrayecto, estado: "listo", datos }))
+      .catch(() => {
+        if (!control.signal.aborted) setTrazos({ clave: claveTrayecto, estado: "error", datos: [] });
+      });
+    return () => control.abort();
+  }, [claveTrayecto, origen, destino, mismoLugar]);
+  const estadoTrazos = trazos.clave === claveTrayecto ? trazos.estado : "cargando";
+
+  const plan = useMemo<PlanRutas | null>(() => {
+    if (!(ahora > 0 && origen && destino && !mismoLugar)) return null;
+    if (estadoTrazos === "listo" && trazos.datos.length > 0) return planearDesdeTrazos(trazos.datos, activos, ahora);
+    if (estadoTrazos === "error") return planearRutas(origen, destino, activos, ahora);
+    return null;
+  }, [ahora, origen, destino, mismoLugar, activos, estadoTrazos, trazos.datos]);
 
   const [seleccion, setSeleccion] = useState<"rapida" | "alterna">("alterna");
   const recomendada = plan?.recomendada ?? null;
@@ -162,6 +185,11 @@ function PlanearRuta() {
 
       {plan ? (
         <>
+          {plan.fuente === "aproximada" && (
+            <Aviso tono="advertencia" titulo="No se pudo cargar la ruta por calles">
+              Revisa tu conexión. Mientras tanto se muestra una ruta aproximada en línea recta.
+            </Aviso>
+          )}
           {plan.recomendada === null && (
             <Aviso tono="info" titulo={MENSAJE_SIMILAR}>
               Elige la que prefieras. La más rápida te toma {plan.rapida.minutos} min.
@@ -187,7 +215,10 @@ function PlanearRuta() {
       ) : null}
 
       <p className="flex items-center gap-2 text-muted-foreground">
-        <Info className="size-5 shrink-0" aria-hidden /> Rutas simuladas con datos de ejemplo
+        <Info className="size-5 shrink-0" aria-hidden />{" "}
+        {plan?.fuente === "aproximada"
+          ? "Ruta aproximada con datos de ejemplo"
+          : "Rutas a pie por calles reales (OpenStreetMap). Novedades de ejemplo"}
       </p>
       <PieDemo className="pt-0" />
     </div>

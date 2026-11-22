@@ -5,7 +5,7 @@ export const LUGARES: Lugar[] = [
   { id: "parque-santander", nombre: "Parque Santander", corto: "Parque Santander", barrio: "Centro", lat: 2.92632, lng: -75.28914 },
   { id: "terminal", nombre: "Terminal de Transportes", corto: "Terminal", barrio: "Andalucía", lat: 2.91683, lng: -75.28251 },
   { id: "malecon", nombre: "Malecón del río Magdalena", corto: "Malecón", barrio: "Centro", lat: 2.92504, lng: -75.29359 },
-  { id: "usco", nombre: "Universidad Surcolombiana", corto: "Usco", barrio: "Los Andaquíes", lat: 2.943, lng: -75.3017 },
+  { id: "usco", nombre: "Universidad Surcolombiana", corto: "Universidad Surcolombiana", barrio: "Los Andaquíes", lat: 2.943, lng: -75.3017 },
   { id: "estadio", nombre: "Estadio Guillermo Plazas Alcid", corto: "Estadio", barrio: "La Libertad", lat: 2.936, lng: -75.28028 },
   { id: "hospital", nombre: "Hospital Universitario Hernando Moncaleano Perdomo", corto: "Hospital Universitario", barrio: "Altico", lat: 2.93258, lng: -75.28103 },
 ];
