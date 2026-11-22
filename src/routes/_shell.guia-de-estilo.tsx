@@ -163,7 +163,7 @@ function GuiaEstilo() {
 
         <Seccion titulo="Avisos">
           <div className="space-y-3">
-            <Aviso tono="info" titulo="Información">Rutas simuladas con datos de ejemplo.</Aviso>
+            <Aviso tono="info" titulo="Información">Las novedades son datos de ejemplo.</Aviso>
             <Aviso tono="exito" titulo="Confirmación">Tu reporte ya está en el mapa.</Aviso>
             <Aviso tono="advertencia" titulo="Precaución">Tramo con mala iluminación después de las 7 p. m.</Aviso>
             <Aviso tono="error" titulo="Error">Elige un punto dentro de Neiva.</Aviso>

@@ -3,7 +3,7 @@ import { contarPor } from "./novedades";
 import { calcularPuntaje, type ResultadoPuntaje } from "./seguridad";
 import type { Coordenada, Reporte } from "./tipos";
 
-/** Las calles no son líneas rectas: la distancia real se estima un 30 % mayor. */
+/** Solo para la ruta aproximada (sin conexión): la distancia por calles se estima un 30 % mayor. */
 export const FACTOR_CALLES = 1.3;
 /** Velocidad a pie */
 export const VELOCIDAD_KMH = 4.8;
@@ -25,6 +25,8 @@ export interface RutaSimulada extends ResultadoPuntaje {
 }
 
 export interface PlanRutas {
+  /** "calles": trazos reales por calles (OSRM). "aproximada": simulación sin conexión. */
+  fuente: "calles" | "aproximada";
   rapida: RutaSimulada;
   alterna: RutaSimulada;
   recomendada: "rapida" | "alterna" | null;
@@ -66,14 +68,15 @@ export function desvioMaximo(ruta: Coordenada[], o: Coordenada, d: Coordenada): 
 
 const FACTORES_CANDIDATOS = [0.2, -0.2, 0.32, -0.32, 0.45, -0.45, 0.58, -0.58];
 
-function armarRuta(
+export function armarRuta(
   id: RutaSimulada["id"],
   nombre: string,
   puntos: Coordenada[],
   reportes: Reporte[],
   ahora: number,
+  metrosReales?: number,
 ): RutaSimulada {
-  const distanciaKm = (longitudRutaMetros(puntos) * FACTOR_CALLES) / 1000;
+  const distanciaKm = (metrosReales ?? longitudRutaMetros(puntos) * FACTOR_CALLES) / 1000;
   const minutos = Math.max(1, Math.round((distanciaKm / VELOCIDAD_KMH) * 60));
   const puntaje = calcularPuntaje(puntos, reportes, ahora, distanciaKm);
   return { id, nombre, puntos, distanciaKm, minutos, ...puntaje };
@@ -92,14 +95,18 @@ export function planearRutas(o: Coordenada, d: Coordenada, reportes: Reporte[], 
     if (!alterna || candidata.bruto > alterna.bruto + 0.01) alterna = candidata;
   }
   alterna ??= armarRuta("alterna", "Ruta alterna", curvaAlterna(o, d, 0.2), reportes, ahora);
+  return decidirPlan(rapida, alterna, "aproximada");
+}
 
+/** Compara las dos rutas y decide cuál recomendar. */
+export function decidirPlan(rapida: RutaSimulada, alterna: RutaSimulada, fuente: PlanRutas["fuente"]): PlanRutas {
   const diferencia = alterna.puntaje - rapida.puntaje;
   if (Math.abs(diferencia) < DIFERENCIA_SIMILAR) {
-    return { rapida, alterna, recomendada: null, explicacion: MENSAJE_SIMILAR };
+    return { fuente, rapida, alterna, recomendada: null, explicacion: MENSAJE_SIMILAR };
   }
   const recomendada = diferencia > 0 ? "alterna" : "rapida";
   const [rec, otra] = recomendada === "alterna" ? [alterna, rapida] : [rapida, alterna];
-  return { rapida, alterna, recomendada, explicacion: explicarRecomendacion(rec, otra) };
+  return { fuente, rapida, alterna, recomendada, explicacion: explicarRecomendacion(rec, otra) };
 }
 
 function unir(partes: string[]): string {
@@ -118,7 +125,7 @@ export function explicarRecomendacion(
   }
   const seguras = rec.conteo.segura - otra.conteo.segura;
   let frase = evita.length > 0 ? `Evita ${unir(evita)}` : "Tiene reportes cercanos menos graves";
-  if (seguras > 0) frase += `${evita.length > 1 ? "," : " y"} pasa por ${contarPor(seguras, "segura")}`;
+  if (seguras > 0) frase += `${evita.length > 1 ? "," : " y"} pasa por ${contarPor(rec.conteo.segura, "segura")}`;
   const extra = rec.minutos - otra.minutos;
   if (extra > 0) frase += `, a cambio de ${extra} min más`;
   else if (extra < 0) frase += `, y además es ${-extra} min más rápida`;
